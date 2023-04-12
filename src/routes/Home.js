@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Movie from "../components/Movie";
+import styles from "./Home.module.css";
 
 function Home() {
   const [loading, setLoading] = useState(true); //로딩이 끝났을 때 영화를 표시
@@ -11,21 +12,25 @@ function Home() {
       )
     ).json();
     setMovies(json.data.movies);
-    setLoading(false);
+    setLoading(false); //로딩이 끝났을 때 false로 바꿔주기
   };
   useEffect(() => {
     //내 컴포넌트가 시작할 때 딱 한번만 실행할 함수
     getMovies();
   }, []);
-  console.log(movies);
   return (
-    <div>
+    <div className={styles.container}>
       {loading ? (
-        <h1>Loading...</h1>
+        <div className={styles.loader}>
+          <span>Loading...</span>
+        </div>
       ) : (
-        <div>
+        <div className={styles.movies}>
           {movies.map((movie) => (
             <Movie
+              key={movie.id} //react.js는 고유한 key를 가져아함
+              id={movie.id} //props로 id를 받아 movie/:id페이지에서 활용
+              year={movie.year}
               coverImg={movie.medium_cover_image}
               title={movie.title}
               summary={movie.summary}
